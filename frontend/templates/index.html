@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <title>Lista de Estudiantes</title>
+</head>
+<body>
+    <h1>Lista de Estudiantes</h1>
+    <table>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Edad</th>
+            <th>Curso</th>
+        </tr>
+        {% for student in students %}
+        <tr>
+            <td contenteditable="true">{{ student.nombre }}</td>
+            <td contenteditable="true">{{ student.apellido }}</td>
+            <td contenteditable="true">{{ student.edad }}</td>
+            <td contenteditable="true">{{ student.curso }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('update_or_delete_student', id=student.id) }}"
+                    onsubmit="return confirm('¿Estás seguro de que quieres eliminar a este estudiante?');">
+                    <button type="submit">Eliminar</button>
+                </form>
+                <form method="POST" action="{{ url_for('update_or_delete_student', id=student.id) }}"
+                    onsubmit="updateHiddenFields(this);">
+                    <input type="hidden" name="name" value="{{ student.nombre }}">
+                    <input type="hidden" name="surname" value="{{ student.apellido }}">
+                    <input type="hidden" name="age" value="{{ student.edad }}">
+                    <input type="hidden" name="course" value="{{ student.curso }}">
+                    <button type="submit">Actualizar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br><br>
+    <h1>Agregar Nuevo Estudiante</h1>
+    <form method="POST" action="{{ url_for('add_student') }}">
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" name="name" required>
+        <br>
+        <label for="surname">Apellido:</label>
+        <input type="text" id="surname" name="surname" required>
+        <br>
+        <label for="age">Edad:</label>
+        <input type="number" id="age" name="age" required>
+        <br>
+        <label for="course">Curso:</label>
+        <select id="course" name="course" required>
+            <option value="SISTOP">SISTOP</option>
+            <option value="LABAPPS">LABAPPS</option>
+        </select>
+        <br><br><br>
+        <button type="submit">Agregar</button>
+    </form>
+</body>
+</html>
